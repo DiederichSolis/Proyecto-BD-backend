@@ -1,18 +1,31 @@
+const express = require('express');
+const cors = require('cors');
 const { driver, closeDriver } = require('./db');
+const nodeRoutes = require('./routes/nodes');
 
-async function testConnection() {
-  const session = driver.session();
-  try {
-    // Ejecuta una consulta simple para probar la conexión
-    const result = await session.run("RETURN 'Conexión exitosa a Aura' AS mensaje");
-    const mensaje = result.records[0].get('mensaje');
-    console.log(mensaje);
-  } catch (error) {
-    console.error('Error al conectar a la base de datos:', error);
-  } finally {
-    await session.close();
-    await closeDriver();
-  }
-}
+const app = express();
+const PORT = 3000;
 
-testConnection();
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Rutas
+app.use('/nodes', nodeRoutes);
+
+// Ruta de prueba
+app.get('/', (req, res) => {
+  res.send('Servidor funcionando correctamente');
+});
+
+// Cerrar conexión con Neo4j al apagar el servidor
+process.on('SIGINT', async () => {
+  console.log('Cerrando conexión con Neo4j...');
+  await closeDriver();
+  process.exit(0);
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+  console.log(`🔥 Servidor corriendo en http://localhost:${PORT}`);
+});
