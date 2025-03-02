@@ -7,6 +7,49 @@ const { driver } = require('../db');
  * GET /queries/recommend-publications/:userId
  * Retorna las 5 publicaciones con mayor impacto relacionadas a las categorías de interés del usuario.
  */
+
+/**
+ * @swagger
+ * /queries/recommend-publications/{userId}:
+ *   get:
+ *     summary: Obtiene recomendaciones de publicaciones para un usuario
+ *     description: Retorna hasta 5 publicaciones recomendadas basadas en los intereses del usuario, ordenadas por impacto.
+ *     tags:
+ *       - Queries
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario para quien se generarán las recomendaciones de publicaciones.
+ *     responses:
+ *       200:
+ *         description: Lista de publicaciones recomendadas.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 publications:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       publication:
+ *                         type: object
+ *                         description: Información sobre la publicación recomendada.
+ *                         example: { "título": "Avances en Machine Learning", "autor": "John Doe", "impacto": 95 }
+ *                       category:
+ *                         type: object
+ *                         description: Información sobre la categoría de la publicación recomendada.
+ *                         example: { "nombre": "Inteligencia Artificial" }
+ *       400:
+ *         description: ID de usuario inválido.
+ *       500:
+ *         description: Error en el servidor al generar recomendaciones.
+ */
+
 router.get('/recommend-publications/:userId', async (req, res) => {
   const session = driver.session();
   const userId = parseInt(req.params.userId, 10);
@@ -35,6 +78,49 @@ router.get('/recommend-publications/:userId', async (req, res) => {
  * GET /queries/suggest-collaborators/:userId
  * Sugiere hasta 5 usuarios que comparten intereses con el usuario y a los que este no sigue.
  */
+
+/**
+ * @swagger
+ * /queries/suggest-collaborators/{userId}:
+ *   get:
+ *     summary: Sugiere posibles colaboradores para un usuario
+ *     description: Retorna hasta 5 usuarios con intereses comunes, que aún no han sido seguidos por el usuario especificado.
+ *     tags:
+ *       - Queries
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario para quien se generarán las recomendaciones de colaboradores.
+ *     responses:
+ *       200:
+ *         description: Lista de posibles colaboradores.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 collaborators:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       user:
+ *                         type: object
+ *                         description: Información sobre el usuario recomendado como colaborador.
+ *                         example: { "nombre": "Ana López", "universidad": "MIT", "especialidad": "Ciencia de Datos" }
+ *                       commonInterests:
+ *                         type: integer
+ *                         description: Número de intereses en común con el usuario.
+ *                         example: 3
+ *       400:
+ *         description: ID de usuario inválido.
+ *       500:
+ *         description: Error en el servidor al generar recomendaciones de colaboradores.
+ */
+
 router.get('/suggest-collaborators/:userId', async (req, res) => {
   const session = driver.session();
   const userId = parseInt(req.params.userId, 10);
@@ -64,6 +150,39 @@ router.get('/suggest-collaborators/:userId', async (req, res) => {
  * GET /queries/trending-categories
  * Retorna las 5 categorías con mayor número de publicaciones a partir de una fecha determinada.
  */
+/**
+ * @swagger
+ * /queries/trending-categories:
+ *   get:
+ *     summary: Obtiene las 5 categorías con más publicaciones recientes
+ *     description: Retorna las categorías con mayor número de publicaciones desde el 1 de enero de 2024.
+ *     tags:
+ *       - Queries
+ *     responses:
+ *       200:
+ *         description: Lista de las categorías en tendencia.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trends:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       category:
+ *                         type: string
+ *                         description: Nombre de la categoría en tendencia.
+ *                         example: "Inteligencia Artificial"
+ *                       publicationCount:
+ *                         type: integer
+ *                         description: Número de publicaciones recientes en la categoría.
+ *                         example: 120
+ *       500:
+ *         description: Error en el servidor al obtener las categorías en tendencia.
+ */
+
 router.get('/trending-categories', async (req, res) => {
   const session = driver.session();
   try {
@@ -91,6 +210,48 @@ router.get('/trending-categories', async (req, res) => {
  * 4️⃣ Recomendación de Conferencias para un Usuario
  * GET /queries/suggest-conferences/:userId
  * Sugiere hasta 5 conferencias basadas en las categorías de interés relacionadas a publicaciones.
+ */
+
+/**
+ * @swagger
+ * /queries/suggest-conferences/{userId}:
+ *   get:
+ *     summary: Sugiere conferencias relevantes para un usuario
+ *     description: Retorna hasta 5 conferencias basadas en los intereses del usuario y publicaciones relacionadas.
+ *     tags:
+ *       - Queries
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario para quien se generarán las recomendaciones de conferencias.
+ *     responses:
+ *       200:
+ *         description: Lista de conferencias recomendadas.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 conferences:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       conference:
+ *                         type: object
+ *                         description: Información sobre la conferencia recomendada.
+ *                         example: { "nombre": "Tech Summit 2024", "ubicación": "San Francisco", "fecha": "2024-09-10" }
+ *                       relevance:
+ *                         type: integer
+ *                         description: Nivel de relevancia de la conferencia para el usuario.
+ *                         example: 5
+ *       400:
+ *         description: ID de usuario inválido.
+ *       500:
+ *         description: Error en el servidor al generar recomendaciones de conferencias.
  */
 router.get('/suggest-conferences/:userId', async (req, res) => {
   const session = driver.session();
@@ -120,6 +281,40 @@ router.get('/suggest-conferences/:userId', async (req, res) => {
  * GET /queries/influential-users
  * Retorna los 5 usuarios con mayor suma de impacto en sus publicaciones.
  */
+
+/**
+ * @swagger
+ * /advanced/influential-users:
+ *   get:
+ *     summary: Obtiene los 5 usuarios más influyentes
+ *     description: Retorna los 5 usuarios con mayor impacto total basado en la suma del impacto de sus publicaciones.
+ *     tags:
+ *       - Queries
+ *     responses:
+ *       200:
+ *         description: Lista de los 5 usuarios más influyentes.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 influentialUsers:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                         description: Nombre del usuario influyente.
+ *                         example: "Juan Pérez"
+ *                       totalImpact:
+ *                         type: integer
+ *                         description: Suma del impacto de todas sus publicaciones.
+ *                         example: 850
+ *       500:
+ *         description: Error en el servidor al obtener los usuarios influyentes.
+ */
+
 router.get('/influential-users', async (req, res) => {
   const session = driver.session();
   try {
@@ -147,6 +342,48 @@ router.get('/influential-users', async (req, res) => {
  * GET /queries/publication-engagement
  * Calcula el engagement de las publicaciones basado en el número de comentarios y reacciones.
  */
+
+/**
+ * @swagger
+ * /queries/publication-engagement:
+ *   get:
+ *     summary: Obtiene las 5 publicaciones con mayor engagement
+ *     description: Retorna las publicaciones con más interacciones (comentarios + reacciones), ordenadas por engagement en orden descendente.
+ *     tags:
+ *       - Queries
+ *     responses:
+ *       200:
+ *         description: Lista de las 5 publicaciones con mayor engagement.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 publicationEngagement:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       publication:
+ *                         type: string
+ *                         description: Título de la publicación.
+ *                         example: "El impacto de la IA en la educación"
+ *                       comments:
+ *                         type: integer
+ *                         description: Número de comentarios en la publicación.
+ *                         example: 35
+ *                       reactions:
+ *                         type: integer
+ *                         description: Número de reacciones en la publicación.
+ *                         example: 120
+ *                       engagement:
+ *                         type: integer
+ *                         description: Total de interacciones (comentarios + reacciones).
+ *                         example: 155
+ *       500:
+ *         description: Error en el servidor al obtener el engagement de publicaciones.
+ */
+
 router.get('/publication-engagement', async (req, res) => {
   const session = driver.session();
   try {
