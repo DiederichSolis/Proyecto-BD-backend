@@ -284,7 +284,7 @@ router.get('/suggest-conferences/:userId', async (req, res) => {
 
 /**
  * @swagger
- * /advanced/influential-users:
+ * /queries/influential-users:
  *   get:
  *     summary: Obtiene los 5 usuarios más influyentes
  *     description: Retorna los 5 usuarios con mayor impacto total basado en la suma del impacto de sus publicaciones.

@@ -8,7 +8,7 @@ const { driver } = require('../db');
 // 📌 Exportar usuarios en CSV
 /**
  * @swagger
- * /exportRankingTrends/users/csv:
+ * /api/users/csv:
  *   get:
  *     summary: Exporta la lista de usuarios en formato CSV
  *     description: Genera y descarga un archivo CSV con información de los usuarios registrados en la base de datos.
@@ -48,7 +48,7 @@ router.get('/export/users/csv', async (req, res) => {
 // 📌 Exportar usuarios en PDF
 /**
  * @swagger
- * /exportRankingTrends/export/users/pdf:
+ * /api/export/users/pdf:
  *   get:
  *     summary: Exporta la lista de usuarios en formato PDF
  *     description: Genera y descarga un archivo PDF con información de los usuarios registrados en la base de datos.
@@ -99,7 +99,7 @@ router.get('/export/users/pdf', async (req, res) => {
 // 📌 Ranking de publicaciones por reputación académica
 /**
  * @swagger
- * /exportRankingTrends/ranking/publications:
+ * /api/ranking/publications:
  *   get:
  *     summary: Obtiene el ranking de las 10 publicaciones más relevantes
  *     description: Retorna las 10 publicaciones con mayor reputación, calculada en función de citas, reacciones y comentarios.
@@ -172,7 +172,7 @@ router.get('/ranking/publications', async (req, res) => {
 // 📌 Identificar categorías de investigación emergentes
 /**
  * @swagger
- * /exportRankingTrends/trends/research:
+ * /api/trends/research:
  *   get:
  *     summary: Obtiene las 5 categorías de investigación más populares en los últimos 6 meses
  *     description: Retorna las categorías con más publicaciones recientes en los últimos 6 meses.

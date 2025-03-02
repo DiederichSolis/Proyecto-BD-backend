@@ -103,6 +103,80 @@ router.post('/:label1/:id1/:relation/:label2/:id2', async (req, res) => {
  * 1️⃣ Agregar propiedades a una relación específica
  * PATCH /relations/update/:label1/:id1/:relation/:label2/:id2
  */
+
+/**
+ * @swagger
+ * /relations/update/{label1}/{id1}/{relation}/{label2}/{id2}:
+ *   patch:
+ *     summary: Actualiza propiedades de una relación entre dos nodos
+ *     description: Permite actualizar propiedades en una relación específica entre dos nodos en la base de datos de Neo4j.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: label1
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Etiqueta del primer nodo.
+ *       - in: path
+ *         name: id1
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del primer nodo.
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de relación entre los nodos.
+ *       - in: path
+ *         name: label2
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Etiqueta del segundo nodo.
+ *       - in: path
+ *         name: id2
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del segundo nodo.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             additionalProperties:
+ *               type: string
+ *             example:
+ *               fechaInicio: "2024-03-01"
+ *               estado: "Activo"
+ *     responses:
+ *       200:
+ *         description: Propiedades actualizadas exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Propiedades agregadas con éxito"
+ *                 relation:
+ *                   type: object
+ *                   description: Propiedades actualizadas de la relación.
+ *                   example: { "fechaInicio": "2024-03-01", "estado": "Activo" }
+ *       400:
+ *         description: No se proporcionaron propiedades para actualizar.
+ *       404:
+ *         description: Relación no encontrada.
+ *       500:
+ *         description: Error en el servidor al actualizar la relación.
+ */
+
 router.patch('/update/:label1/:id1/:relation/:label2/:id2', async (req, res) => {
     const session = driver.session();
     const label1 = sanitizeLabel(req.params.label1);
@@ -142,6 +216,54 @@ router.patch('/update/:label1/:id1/:relation/:label2/:id2', async (req, res) => 
    * 2️⃣ Agregar propiedades a múltiples relaciones
    * PATCH /relations/update/:relation
    */
+
+  /**
+ * @swagger
+ * /relations/update/{relation}:
+ *   patch:
+ *     summary: Actualiza propiedades de múltiples relaciones
+ *     description: Permite actualizar propiedades en varias relaciones de un tipo específico en la base de datos de Neo4j utilizando filtros.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de relación que se desea actualizar.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               filter:
+ *                 type: object
+ *                 description: Criterios para filtrar las relaciones a actualizar.
+ *                 example: { "estado": "Pendiente" }
+ *               properties:
+ *                 type: object
+ *                 description: Propiedades que se desean actualizar en las relaciones filtradas.
+ *                 example: { "estado": "Aprobado", "fechaActualizacion": "2024-03-01" }
+ *     responses:
+ *       200:
+ *         description: Propiedades actualizadas exitosamente en múltiples relaciones.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Propiedades agregadas a 3 relaciones."
+ *       400:
+ *         description: No se proporcionaron propiedades o filtros para actualizar.
+ *       500:
+ *         description: Error en el servidor al actualizar las relaciones.
+ */
+
   router.patch('/update/:relation', async (req, res) => {
     const session = driver.session();
     const relation = sanitizeLabel(req.params.relation);
@@ -178,6 +300,80 @@ router.patch('/update/:label1/:id1/:relation/:label2/:id2', async (req, res) => 
    * 3️⃣ Actualizar propiedades de una relación específica
    * PUT /relations/update/:label1/:id1/:relation/:label2/:id2
    */
+
+  /**
+ * @swagger
+ * /relations/update/{label1}/{id1}/{relation}/{label2}/{id2}:
+ *   put:
+ *     summary: Reemplaza todas las propiedades de una relación entre dos nodos
+ *     description: Permite actualizar completamente las propiedades de una relación específica entre dos nodos en la base de datos de Neo4j.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: label1
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Etiqueta del primer nodo.
+ *       - in: path
+ *         name: id1
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del primer nodo.
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de relación entre los nodos.
+ *       - in: path
+ *         name: label2
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Etiqueta del segundo nodo.
+ *       - in: path
+ *         name: id2
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del segundo nodo.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             additionalProperties:
+ *               type: string
+ *             example:
+ *               fechaInicio: "2024-03-01"
+ *               estado: "Activo"
+ *     responses:
+ *       200:
+ *         description: Propiedades actualizadas con éxito.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Propiedades actualizadas con éxito"
+ *                 relation:
+ *                   type: object
+ *                   description: Propiedades actualizadas de la relación.
+ *                   example: { "fechaInicio": "2024-03-01", "estado": "Activo" }
+ *       400:
+ *         description: No se proporcionaron propiedades para actualizar.
+ *       404:
+ *         description: Relación no encontrada.
+ *       500:
+ *         description: Error en el servidor al actualizar la relación.
+ */
+
   router.put('/update/:label1/:id1/:relation/:label2/:id2', async (req, res) => {
     const session = driver.session();
     const label1 = sanitizeLabel(req.params.label1);
@@ -217,6 +413,75 @@ router.patch('/update/:label1/:id1/:relation/:label2/:id2', async (req, res) => 
    * 4️⃣ Eliminar una o más propiedades de una relación
    * DELETE /relations/properties/:label1/:id1/:relation/:label2/:id2
    */
+  /**
+ * @swagger
+ * /relations/properties/{label1}/{id1}/{relation}/{label2}/{id2}:
+ *   delete:
+ *     summary: Elimina propiedades específicas de una relación entre dos nodos
+ *     description: Permite eliminar propiedades de una relación específica entre dos nodos en la base de datos de Neo4j.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: label1
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Etiqueta del primer nodo.
+ *       - in: path
+ *         name: id1
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del primer nodo.
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de relación entre los nodos.
+ *       - in: path
+ *         name: label2
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Etiqueta del segundo nodo.
+ *       - in: path
+ *         name: id2
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del segundo nodo.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               properties:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Lista de nombres de propiedades a eliminar de la relación.
+ *                 example: ["fechaInicio", "estado"]
+ *     responses:
+ *       200:
+ *         description: Propiedades eliminadas con éxito.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Propiedades eliminadas: fechaInicio, estado"
+ *       400:
+ *         description: No se proporcionaron propiedades para eliminar.
+ *       500:
+ *         description: Error en el servidor al eliminar propiedades de la relación.
+ */
+
   router.delete('/properties/:label1/:id1/:relation/:label2/:id2', async (req, res) => {
     const session = driver.session();
     const label1 = sanitizeLabel(req.params.label1);
@@ -251,6 +516,54 @@ router.patch('/update/:label1/:id1/:relation/:label2/:id2', async (req, res) => 
  * 5️⃣ Actualizar propiedades en múltiples relaciones al mismo tiempo
  * PUT /relations/update/:relation
  */
+
+  /**
+ * @swagger
+ * /relations/update/{relation}:
+ *   put:
+ *     summary: Reemplaza todas las propiedades de múltiples relaciones
+ *     description: Permite actualizar completamente las propiedades de múltiples relaciones en la base de datos de Neo4j utilizando filtros.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de relación que se desea actualizar.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               filter:
+ *                 type: object
+ *                 description: Criterios para filtrar las relaciones a actualizar.
+ *                 example: { "estado": "Pendiente" }
+ *               properties:
+ *                 type: object
+ *                 description: Propiedades que se desean actualizar en las relaciones filtradas.
+ *                 example: { "estado": "Aprobado", "fechaActualizacion": "2024-03-01" }
+ *     responses:
+ *       200:
+ *         description: Propiedades actualizadas en múltiples relaciones.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Propiedades actualizadas en 3 relaciones."
+ *       400:
+ *         description: No se proporcionaron propiedades o filtros para actualizar.
+ *       500:
+ *         description: Error en el servidor al actualizar las relaciones.
+ */
+
 router.put('/update/:relation', async (req, res) => {
     const session = driver.session();
     const relation = sanitizeLabel(req.params.relation);
@@ -291,6 +604,56 @@ router.put('/update/:relation', async (req, res) => {
    * 6️⃣ Eliminar una o más propiedades de múltiples relaciones al mismo tiempo
    * DELETE /relations/properties/:relation
    */
+
+  /**
+ * @swagger
+ * /relations/properties/{relation}:
+ *   delete:
+ *     summary: Elimina propiedades específicas de múltiples relaciones
+ *     description: Permite eliminar propiedades de múltiples relaciones en la base de datos de Neo4j utilizando filtros.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de relación de la cual se eliminarán propiedades.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               filter:
+ *                 type: object
+ *                 description: Criterios para filtrar las relaciones a modificar.
+ *                 example: { "estado": "Pendiente" }
+ *               properties:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Lista de propiedades a eliminar de las relaciones filtradas.
+ *                 example: ["fechaInicio", "estado"]
+ *     responses:
+ *       200:
+ *         description: Propiedades eliminadas con éxito en múltiples relaciones.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Propiedades eliminadas en 5 relaciones."
+ *       400:
+ *         description: No se proporcionaron propiedades o filtros para eliminar.
+ *       500:
+ *         description: Error en el servidor al eliminar propiedades de las relaciones.
+ */
+
   router.delete('/properties/:relation', async (req, res) => {
     const session = driver.session();
     const relation = sanitizeLabel(req.params.relation);
@@ -330,6 +693,63 @@ router.put('/update/:relation', async (req, res) => {
  * 1️⃣ Eliminar una relación específica entre dos nodos
  * DELETE /relations/:label1/:id1/:relation/:label2/:id2
  */
+
+  /**
+ * @swagger
+ * /relations/{label1}/{id1}/{relation}/{label2}/{id2}:
+ *   delete:
+ *     summary: Elimina una relación específica entre dos nodos
+ *     description: Permite eliminar una relación específica entre dos nodos en la base de datos de Neo4j.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: label1
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Etiqueta del primer nodo.
+ *       - in: path
+ *         name: id1
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del primer nodo.
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de relación a eliminar.
+ *       - in: path
+ *         name: label2
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Etiqueta del segundo nodo.
+ *       - in: path
+ *         name: id2
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del segundo nodo.
+ *     responses:
+ *       200:
+ *         description: Relación eliminada con éxito.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Relación SIGUE_A eliminada exitosamente entre Usuario (ID 1) y Usuario (ID 2)."
+ *       404:
+ *         description: Relación no encontrada.
+ *       500:
+ *         description: Error en el servidor al eliminar la relación.
+ */
+
 router.delete('/:label1/:id1/:relation/:label2/:id2', async (req, res) => {
     const session = driver.session();
     const label1 = sanitizeLabel(req.params.label1);
@@ -370,6 +790,52 @@ router.delete('/:label1/:id1/:relation/:label2/:id2', async (req, res) => {
    * 2️⃣ Eliminar múltiples relaciones según un filtro
    * DELETE /relations/:relation
    */
+
+  /**
+ * @swagger
+ * /relations/{relation}:
+ *   delete:
+ *     summary: Elimina múltiples relaciones basadas en un filtro
+ *     description: Permite eliminar varias relaciones de un tipo específico en la base de datos de Neo4j utilizando filtros.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de relación que se desea eliminar.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               filter:
+ *                 type: object
+ *                 description: Criterios para seleccionar las relaciones a eliminar.
+ *                 example: { "estado": "Inactivo" }
+ *     responses:
+ *       200:
+ *         description: Relaciones eliminadas con éxito.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "10 relaciones SIGUE_A eliminadas exitosamente."
+ *       400:
+ *         description: No se proporcionó un filtro para eliminar relaciones.
+ *       404:
+ *         description: No se encontraron relaciones con el filtro especificado.
+ *       500:
+ *         description: Error en el servidor al eliminar las relaciones.
+ */
+
   router.delete('/:relation', async (req, res) => {
     const session = driver.session();
     const relation = sanitizeLabel(req.params.relation);

@@ -5,9 +5,9 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Documentación - Neo4j & Node.js',
+      title: 'API Documentación - Neo4j & Node.js ',
       version: '1.0.0',
-      description: 'API que interactúa con Neo4j para la gestión de nodos, relaciones y consultas avanzadas.',
+      description: 'Documentacion de API que interactúan con Neo4j para la gestión de nodos, relaciones y consultas avanzadas.',
     },
     servers: [
       {

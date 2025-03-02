@@ -9,7 +9,7 @@ const { driver } = require('../db');
 
 /**
  * @swagger
- * /advancedQueries/influential-users:
+ * /advanced/influential-users:
  *   get:
  *     summary: Obtiene los 5 usuarios más influyentes
  *     description: Retorna los 5 usuarios con el mayor número de seguidores basado en la relación `SIGUE_A`.
@@ -67,7 +67,7 @@ router.get('/influential-users', async (req, res) => {
  */
 /**
  * @swagger
- * /advancedQueries/personalized-recommendations/{userId}:
+ * /advanced/personalized-recommendations/{userId}:
  *   get:
  *     summary: Obtiene recomendaciones personalizadas para un usuario
  *     description: Retorna hasta 5 publicaciones recomendadas basadas en los intereses del usuario.
@@ -136,7 +136,7 @@ router.get('/personalized-recommendations/:userId', async (req, res) => {
  */
 /**
  * @swagger
- * /advancedQueries/trending-categories:
+ * /advanced/trending-categories:
  *   get:
  *     summary: Obtiene las 5 categorías con más publicaciones recientes
  *     description: Retorna las categorías con mayor número de publicaciones desde el 1 de enero de 2024.
@@ -196,7 +196,7 @@ router.get('/trending-categories', async (req, res) => {
    */
   /**
  * @swagger
- * /advancedQueries/top-engagement-publications:
+ * /advanced/top-engagement-publications:
  *   get:
  *     summary: Obtiene las 5 publicaciones con mayor engagement
  *     description: Retorna las publicaciones con más interacciones (comentarios + reacciones), ordenadas por engagement en orden descendente.
@@ -268,7 +268,7 @@ router.get('/trending-categories', async (req, res) => {
    */
   /**
  * @swagger
- * /advancedQueries/suggest-conferences/{userId}:
+ * /advanced/suggest-conferences/{userId}:
  *   get:
  *     summary: Obtiene conferencias recomendadas para un usuario
  *     description: Retorna hasta 5 conferencias basadas en los intereses del usuario y publicaciones relacionadas.
@@ -340,7 +340,7 @@ router.get('/trending-categories', async (req, res) => {
    */
   /**
  * @swagger
- * /advancedQueries/network-summary:
+ * /advanced/network-summary:
  *   get:
  *     summary: Obtiene un resumen de la red
  *     description: Retorna un resumen con la cantidad de nodos y relaciones en la base de datos de Neo4j.
