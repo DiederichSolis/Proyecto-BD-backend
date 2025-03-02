@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { driver, closeDriver } = require('./db');
 const nodeRoutes = require('./routes/nodes');
+const relationRoutes = require('./routes/relations'); // 🔹 Importar rutas de relaciones
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // Rutas
 app.use('/nodes', nodeRoutes);
+app.use('/relations', relationRoutes); // 🔹 Agregar las rutas de relaciones
 
 // Ruta de prueba
 app.get('/', (req, res) => {
