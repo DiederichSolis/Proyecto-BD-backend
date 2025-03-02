@@ -9,12 +9,12 @@ const { driver } = require('../db');
 
 /**
  * @swagger
- * /advanced/influential-users:
+ * /advancedQueries/influential-users:
  *   get:
  *     summary: Obtiene los 5 usuarios más influyentes
  *     description: Retorna los 5 usuarios con el mayor número de seguidores basado en la relación `SIGUE_A`.
  *     tags:
- *       - Consultas Avanzadas
+ *       - AdvancedQueries
  *     responses:
  *       200:
  *         description: Lista de los 5 usuarios más influyentes.
@@ -67,12 +67,12 @@ router.get('/influential-users', async (req, res) => {
  */
 /**
  * @swagger
- * /advanced/personalized-recommendations/{userId}:
+ * /advancedQueries/personalized-recommendations/{userId}:
  *   get:
  *     summary: Obtiene recomendaciones personalizadas para un usuario
  *     description: Retorna hasta 5 publicaciones recomendadas basadas en los intereses del usuario.
  *     tags:
- *       - Consultas Avanzadas
+ *       - AdvancedQueries
  *     parameters:
  *       - in: path
  *         name: userId
@@ -136,12 +136,12 @@ router.get('/personalized-recommendations/:userId', async (req, res) => {
  */
 /**
  * @swagger
- * /advanced/trending-categories:
+ * /advancedQueries/trending-categories:
  *   get:
  *     summary: Obtiene las 5 categorías con más publicaciones recientes
  *     description: Retorna las categorías con mayor número de publicaciones desde el 1 de enero de 2024.
  *     tags:
- *       - Consultas Avanzadas
+ *       - AdvancedQueries
  *     responses:
  *       200:
  *         description: Lista de las categorías en tendencia.
@@ -196,12 +196,12 @@ router.get('/trending-categories', async (req, res) => {
    */
   /**
  * @swagger
- * /advanced/top-engagement-publications:
+ * /advancedQueries/top-engagement-publications:
  *   get:
  *     summary: Obtiene las 5 publicaciones con mayor engagement
  *     description: Retorna las publicaciones con más interacciones (comentarios + reacciones), ordenadas por engagement en orden descendente.
  *     tags:
- *       - Consultas Avanzadas
+ *       - AdvancedQueries
  *     responses:
  *       200:
  *         description: Lista de las publicaciones con mayor engagement.
@@ -268,12 +268,12 @@ router.get('/trending-categories', async (req, res) => {
    */
   /**
  * @swagger
- * /advanced/suggest-conferences/{userId}:
+ * /advancedQueries/suggest-conferences/{userId}:
  *   get:
  *     summary: Obtiene conferencias recomendadas para un usuario
  *     description: Retorna hasta 5 conferencias basadas en los intereses del usuario y publicaciones relacionadas.
  *     tags:
- *       - Consultas Avanzadas
+ *       - AdvancedQueries
  *     parameters:
  *       - in: path
  *         name: userId
@@ -340,12 +340,12 @@ router.get('/trending-categories', async (req, res) => {
    */
   /**
  * @swagger
- * /advanced/network-summary:
+ * /advancedQueries/network-summary:
  *   get:
  *     summary: Obtiene un resumen de la red
  *     description: Retorna un resumen con la cantidad de nodos y relaciones en la base de datos de Neo4j.
  *     tags:
- *       - Consultas Avanzadas
+ *       - AdvancedQueries
  *     responses:
  *       200:
  *         description: Resumen de la red con nodos y relaciones.

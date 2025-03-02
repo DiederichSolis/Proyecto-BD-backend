@@ -6,6 +6,26 @@ const router = express.Router();
 const { driver } = require('../db');
 
 // 📌 Exportar usuarios en CSV
+/**
+ * @swagger
+ * /exportRankingTrends/users/csv:
+ *   get:
+ *     summary: Exporta la lista de usuarios en formato CSV
+ *     description: Genera y descarga un archivo CSV con información de los usuarios registrados en la base de datos.
+ *     tags:
+ *       - ExportRankingTrends
+ *     responses:
+ *       200:
+ *         description: Archivo CSV generado con la lista de usuarios.
+ *         content:
+ *           text/csv:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       500:
+ *         description: Error en el servidor al exportar el archivo CSV.
+ */
+
 router.get('/export/users/csv', async (req, res) => {
     const session = driver.session();
     try {
@@ -26,6 +46,26 @@ router.get('/export/users/csv', async (req, res) => {
 });
 
 // 📌 Exportar usuarios en PDF
+/**
+ * @swagger
+ * /exportRankingTrends/export/users/pdf:
+ *   get:
+ *     summary: Exporta la lista de usuarios en formato PDF
+ *     description: Genera y descarga un archivo PDF con información de los usuarios registrados en la base de datos.
+ *     tags:
+ *       - ExportRankingTrends
+ *     responses:
+ *       200:
+ *         description: Archivo PDF generado con la lista de usuarios.
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       500:
+ *         description: Error en el servidor al exportar el archivo PDF.
+ */
+
 router.get('/export/users/pdf', async (req, res) => {
     const session = driver.session();
     try {
@@ -57,6 +97,51 @@ router.get('/export/users/pdf', async (req, res) => {
 });
 
 // 📌 Ranking de publicaciones por reputación académica
+/**
+ * @swagger
+ * /exportRankingTrends/ranking/publications:
+ *   get:
+ *     summary: Obtiene el ranking de las 10 publicaciones más relevantes
+ *     description: Retorna las 10 publicaciones con mayor reputación, calculada en función de citas, reacciones y comentarios.
+ *     tags:
+ *       - ExportRankingTrends
+ *     responses:
+ *       200:
+ *         description: Lista de las 10 publicaciones con mayor reputación.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 publications:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       Título:
+ *                         type: string
+ *                         description: Título de la publicación.
+ *                         example: "Avances en inteligencia artificial"
+ *                       Citas:
+ *                         type: integer
+ *                         description: Número de citas de la publicación.
+ *                         example: 25
+ *                       Reacciones:
+ *                         type: integer
+ *                         description: Número de reacciones que recibió la publicación.
+ *                         example: 150
+ *                       Comentarios:
+ *                         type: integer
+ *                         description: Número de comentarios en la publicación.
+ *                         example: 45
+ *                       Reputación:
+ *                         type: integer
+ *                         description: Puntuación de reputación basada en la fórmula (Citas + Reacciones * 2 + Comentarios * 3).
+ *                         example: 460
+ *       500:
+ *         description: Error en el servidor al obtener el ranking de publicaciones.
+ */
+
 router.get('/ranking/publications', async (req, res) => {
     const session = driver.session();
     try {
@@ -85,6 +170,39 @@ router.get('/ranking/publications', async (req, res) => {
 });
 
 // 📌 Identificar categorías de investigación emergentes
+/**
+ * @swagger
+ * /exportRankingTrends/trends/research:
+ *   get:
+ *     summary: Obtiene las 5 categorías de investigación más populares en los últimos 6 meses
+ *     description: Retorna las categorías con más publicaciones recientes en los últimos 6 meses.
+ *     tags:
+ *       - ExportRankingTrends
+ *     responses:
+ *       200:
+ *         description: Lista de las categorías de investigación con más publicaciones recientes.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 trends:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       Categoría:
+ *                         type: string
+ *                         description: Nombre de la categoría de investigación.
+ *                         example: "Inteligencia Artificial"
+ *                       PublicacionesRecientes:
+ *                         type: integer
+ *                         description: Número de publicaciones en esta categoría en los últimos 6 meses.
+ *                         example: 120
+ *       500:
+ *         description: Error en el servidor al obtener las tendencias de investigación.
+ */
+
 router.get('/trends/research', async (req, res) => {
     const session = driver.session();
     try {
