@@ -2,7 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const { driver, closeDriver } = require('./db');
 const nodeRoutes = require('./routes/nodes');
-const relationRoutes = require('./routes/relations'); // 🔹 Importar rutas de relaciones
+const relationsRoutes = require('./routes/relations');
+const queriesRoutes = require('./routes/queries');
+const advancedQueries = require('./routes/advancedQueries');
+const exportRankingTrendsRoutes = require('./routes/exportRankingTrends');
 
 const app = express();
 const PORT = 3000;
@@ -13,7 +16,10 @@ app.use(express.json());
 
 // Rutas
 app.use('/nodes', nodeRoutes);
-app.use('/relations', relationRoutes); // 🔹 Agregar las rutas de relaciones
+app.use('/relations', relationsRoutes);
+app.use('/queries', queriesRoutes);
+app.use('/advanced', advancedQueries);
+app.use('/api', exportRankingTrendsRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
