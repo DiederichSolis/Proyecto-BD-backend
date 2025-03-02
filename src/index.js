@@ -6,7 +6,7 @@ const relationsRoutes = require('./routes/relations');
 const queriesRoutes = require('./routes/queries');
 const advancedQueries = require('./routes/advancedQueries');
 const exportRankingTrendsRoutes = require('./routes/exportRankingTrends');
-
+const swaggerDocs = require('./swagger'); 
 const app = express();
 const PORT = 3000;
 
@@ -21,6 +21,8 @@ app.use('/queries', queriesRoutes);
 app.use('/advanced', advancedQueries);
 app.use('/api', exportRankingTrendsRoutes);
 
+swaggerDocs(app); // Activa Swagger
+
 // Ruta de prueba
 app.get('/', (req, res) => {
   res.send('Servidor funcionando correctamente');
@@ -32,6 +34,7 @@ process.on('SIGINT', async () => {
   await closeDriver();
   process.exit(0);
 });
+
 
 // Iniciar servidor
 app.listen(PORT, () => {

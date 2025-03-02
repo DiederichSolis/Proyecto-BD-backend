@@ -8,9 +8,59 @@ function sanitizeLabel(label) {
 }
 
 /**
- * POST /relations/:label1/:id1/:relation/:label2/:id2
- * Crea una relación entre dos nodos existentes con propiedades.
- * Ejemplo: POST /relations/Usuario/1/SIGUE_A/Usuario/2
+ * @swagger
+ * /relations/{label1}/{id1}/{relation}/{label2}/{id2}:
+ *   post:
+ *     summary: Crea una relación entre dos nodos existentes.
+ *     tags:
+ *       - Relations
+ *     parameters:
+ *       - in: path
+ *         name: label1
+ *         required: true
+ *         description: Etiqueta del primer nodo.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id1
+ *         required: true
+ *         description: ID del primer nodo.
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: relation
+ *         required: true
+ *         description: Tipo de relación entre los nodos.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: label2
+ *         required: true
+ *         description: Etiqueta del segundo nodo.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id2
+ *         required: true
+ *         description: ID del segundo nodo.
+ *         schema:
+ *           type: integer
+ *       - in: body
+ *         name: properties
+ *         required: true
+ *         description: Propiedades de la relación.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             fecha:
+ *               type: string
+ *               format: date
+ *               example: "2024-03-01"
+ *     responses:
+ *       201:
+ *         description: Relación creada exitosamente.
+ *       400:
+ *         description: Datos inválidos en la solicitud.
  */
 router.post('/:label1/:id1/:relation/:label2/:id2', async (req, res) => {
   const session = driver.session();

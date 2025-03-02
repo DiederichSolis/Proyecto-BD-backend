@@ -2,7 +2,38 @@ const express = require('express');
 const router = express.Router();
 const { driver } = require('../db');
 
-// Crear un nodo con ID incremental y label en la URL
+
+/**
+ * @swagger
+ * /nodes/{label}:
+ *   post:
+ *     summary: Crea un nuevo nodo en la base de datos.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo a crear.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: body
+ *         required: true
+ *         description: Propiedades del nodo.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *               example: "Juan Pérez"
+ *     responses:
+ *       201:
+ *         description: Nodo creado exitosamente.
+ *       400:
+ *         description: Error en la solicitud.
+ */
+
 router.post('/:label', async (req, res) => {
     const session = driver.session();
     const { label } = req.params; // Obtener el label desde la URL
@@ -58,6 +89,38 @@ function parseValue(val) {
     return val;
   }
   
+
+
+  /**
+ * @swagger
+ * /nodes/create/{labels}:
+ *   post:
+ *     summary: Crea un nodo con múltiples etiquetas en la base de datos.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: labels
+ *         required: true
+ *         description: Etiquetas del nodo separadas por comas.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: body
+ *         required: true
+ *         description: Propiedades del nodo.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *               example: "Ana López"
+ *     responses:
+ *       201:
+ *         description: Nodo creado exitosamente.
+ *       400:
+ *         description: Error en la solicitud.
+ */
   router.post('/create/:labels', async (req, res) => {
     const session = driver.session();
     try {
@@ -106,11 +169,34 @@ function parseValue(val) {
   });
 
 
+
  /**
  * GET /nodes/read/:label
  * Consultar muchos nodos de un label, con filtros opcionales a través de query parameters.
  * Ejemplo: GET /nodes/read/Usuario?activo=true&rol=estudiante
  */
+
+ /**
+ * @swagger
+ * /nodes/read/{label}:
+ *   get:
+ *     summary: Obtiene nodos de un tipo específico con filtros opcionales.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo a consultar.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lista de nodos recuperados.
+ *       400:
+ *         description: Error en la solicitud.
+ */
+
 router.get('/read/:label', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -144,6 +230,32 @@ router.get('/read/:label', async (req, res) => {
    * Consultar un solo nodo de un label por su ID.
    * Ejemplo: GET /nodes/read/Usuario/5
    */
+  /**
+ * @swagger
+ * /nodes/read/{label}/{id}:
+ *   get:
+ *     summary: Obtiene un nodo por su ID.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del nodo.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Nodo recuperado exitosamente.
+ *       404:
+ *         description: Nodo no encontrado.
+ */
   router.get('/read/:label/:id', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -175,6 +287,33 @@ router.get('/read/:label', async (req, res) => {
    *   - GET /nodes/aggregate/Publicación   (retorna el conteo total)
    *   - GET /nodes/aggregate/Publicación?groupBy=rol  (retorna el conteo por rol)
    */
+
+  /**
+ * @swagger
+ * /nodes/aggregate/{label}:
+ *   get:
+ *     summary: Obtiene estadísticas sobre los nodos de un label específico.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo a consultar.
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: groupBy
+ *         required: false
+ *         description: Propiedad por la cual agrupar los nodos.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Estadísticas obtenidas exitosamente.
+ *       400:
+ *         description: Error en la solicitud.
+ */
   router.get('/aggregate/:label', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -202,7 +341,40 @@ router.get('/read/:label', async (req, res) => {
     }
   });
 
-  // **1️⃣ Agregar una o más propiedades a un nodo específico**
+  // **1️⃣ Agregar una o más propiedades a un nodo específico*
+
+/**
+ * @swagger
+ * /nodes/update/{label}/{id}:
+ *   patch:
+ *     summary: Agrega propiedades a un nodo específico.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del nodo a actualizar.
+ *         schema:
+ *           type: integer
+ *       - in: body
+ *         name: properties
+ *         required: true
+ *         description: Propiedades a agregar al nodo.
+ *         schema:
+ *           type: object
+ *     responses:
+ *       200:
+ *         description: Nodo actualizado exitosamente.
+ *       404:
+ *         description: Nodo no encontrado.
+ */
 router.patch('/update/:label/:id', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -233,6 +405,39 @@ router.patch('/update/:label/:id', async (req, res) => {
   });
   
   // **2️⃣ Agregar una o más propiedades a múltiples nodos usando filtros**
+
+  /**
+ * @swagger
+ * /nodes/update/{label}:
+ *   patch:
+ *     summary: Agrega propiedades a múltiples nodos usando filtros.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: filter
+ *         required: true
+ *         description: Filtro de nodos a actualizar.
+ *         schema:
+ *           type: object
+ *       - in: body
+ *         name: properties
+ *         required: true
+ *         description: Propiedades a agregar a los nodos.
+ *         schema:
+ *           type: object
+ *     responses:
+ *       200:
+ *         description: Nodos actualizados exitosamente.
+ *       400:
+ *         description: Error en la solicitud.
+ */
   router.patch('/update/:label', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -264,6 +469,38 @@ router.patch('/update/:label/:id', async (req, res) => {
   });
   
   // **3️⃣ Actualizar propiedades de un nodo específico**
+  /**
+ * @swagger
+ * /nodes/update/{label}/{id}:
+ *   put:
+ *     summary: Actualiza propiedades de un nodo específico.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del nodo a actualizar.
+ *         schema:
+ *           type: integer
+ *       - in: body
+ *         name: properties
+ *         required: true
+ *         description: Propiedades a actualizar.
+ *         schema:
+ *           type: object
+ *     responses:
+ *       200:
+ *         description: Nodo actualizado exitosamente.
+ *       404:
+ *         description: Nodo no encontrado.
+ */
   router.put('/update/:label/:id', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -294,6 +531,39 @@ router.patch('/update/:label/:id', async (req, res) => {
   });
   
   // **4️⃣ Actualizar propiedades de múltiples nodos con filtros**
+  /**
+ * @swagger
+ * /nodes/update/{label}:
+ *   put:
+ *     summary: Actualiza propiedades de múltiples nodos con filtros.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: filter
+ *         required: true
+ *         description: Filtro de nodos a actualizar.
+ *         schema:
+ *           type: object
+ *       - in: body
+ *         name: properties
+ *         required: true
+ *         description: Propiedades a actualizar en los nodos.
+ *         schema:
+ *           type: object
+ *     responses:
+ *       200:
+ *         description: Nodos actualizados exitosamente.
+ *       400:
+ *         description: Error en la solicitud.
+ */
+
   router.put('/update/:label', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -325,6 +595,40 @@ router.patch('/update/:label/:id', async (req, res) => {
   });
   
   // **5️⃣ Eliminar una o más propiedades de un nodo específico**
+  /**
+ * @swagger
+ * /nodes/properties/{label}/{id}:
+ *   delete:
+ *     summary: Elimina una o más propiedades de un nodo específico.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del nodo.
+ *         schema:
+ *           type: integer
+ *       - in: body
+ *         name: properties
+ *         required: true
+ *         description: Lista de propiedades a eliminar.
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *     responses:
+ *       200:
+ *         description: Propiedades eliminadas exitosamente.
+ *       400:
+ *         description: Error en la solicitud.
+ */
   router.delete('/properties/:label/:id', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -350,6 +654,41 @@ router.patch('/update/:label/:id', async (req, res) => {
     }
   });
   
+
+  /**
+ * @swagger
+ * /nodes/properties/{label}:
+ *   delete:
+ *     summary: Elimina una o más propiedades de múltiples nodos con filtros.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: filter
+ *         required: true
+ *         description: Filtro de nodos a los cuales eliminar propiedades.
+ *         schema:
+ *           type: object
+ *       - in: body
+ *         name: properties
+ *         required: true
+ *         description: Lista de propiedades a eliminar en los nodos.
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *     responses:
+ *       200:
+ *         description: Propiedades eliminadas en múltiples nodos.
+ *       400:
+ *         description: Error en la solicitud.
+ */
 
   router.delete('/properties/:label', async (req, res) => {
     const session = driver.session();
@@ -389,6 +728,34 @@ router.patch('/update/:label/:id', async (req, res) => {
  * 1️⃣ Eliminar un nodo por ID
  * DELETE /nodes/:label/:id
  */
+
+  /**
+ * @swagger
+ * /nodes/{label}/{id}:
+ *   delete:
+ *     summary: Elimina un nodo por su ID.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo.
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del nodo a eliminar.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Nodo eliminado exitosamente.
+ *       404:
+ *         description: Nodo no encontrado.
+ */
+
 router.delete('/:label/:id', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
@@ -420,6 +787,35 @@ router.delete('/:label/:id', async (req, res) => {
    * 2️⃣ Eliminar múltiples nodos con un filtro
    * DELETE /nodes/:label
    */
+
+  /**
+ * @swagger
+ * /nodes/{label}:
+ *   delete:
+ *     summary: Elimina múltiples nodos basados en un filtro.
+ *     tags:
+ *       - Nodes
+ *     parameters:
+ *       - in: path
+ *         name: label
+ *         required: true
+ *         description: Etiqueta del nodo a eliminar.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: filter
+ *         required: true
+ *         description: Filtros para seleccionar los nodos a eliminar.
+ *         schema:
+ *           type: object
+ *     responses:
+ *       200:
+ *         description: Nodos eliminados exitosamente.
+ *       404:
+ *         description: No se encontraron nodos con el filtro especificado.
+ *       400:
+ *         description: Error en la solicitud.
+ */
   router.delete('/:label', async (req, res) => {
     const session = driver.session();
     const label = sanitizeLabel(req.params.label);
