@@ -46,7 +46,7 @@ router.get('/influential-users', async (req, res) => {
       MATCH (u:Usuario)<-[:SIGUE_A]-(other)
       RETURN u.nombre AS Usuario, COUNT(other) AS Influencia
       ORDER BY Influencia DESC
-      LIMIT 5
+      LIMIT 10
     `;
     const result = await session.run(query);
     const influentialUsers = result.records.map(record => ({
@@ -115,7 +115,7 @@ router.get('/personalized-recommendations/:userId', async (req, res) => {
       MATCH (u:Usuario {id: $userId})-[:TIENE_INTERÉS_EN]->(c:Categoría)<-[:RELACIONADO_CON]-(p:Publicación)
       RETURN p.título AS Publicación, COUNT(c) AS Relevancia
       ORDER BY Relevancia DESC
-      LIMIT 5
+      LIMIT 10
     `;
     const result = await session.run(query, { userId });
     const recommendations = result.records.map(record => ({
@@ -175,7 +175,7 @@ router.get('/trending-categories', async (req, res) => {
         WHERE p.fecha_publicación > date("2024-01-01")
         RETURN cat.nombre AS Categoria, count(p) AS NumeroDePublicaciones
         ORDER BY NumeroDePublicaciones DESC
-        LIMIT 5
+        LIMIT 10
       `;
       const result = await session.run(query);
       const trends = result.records.map(record => ({
@@ -245,7 +245,7 @@ router.get('/trending-categories', async (req, res) => {
         RETURN p.título AS Publicacion, count(DISTINCT c) AS Comentarios, count(DISTINCT r) AS Reacciones,
                (count(DISTINCT c) + count(DISTINCT r)) AS Engagement
         ORDER BY Engagement DESC
-        LIMIT 5
+        LIMIT 10
       `;
       const result = await session.run(query);
       const publications = result.records.map(record => ({
@@ -317,7 +317,7 @@ router.get('/trending-categories', async (req, res) => {
         <-[:RELACIONADO_CON]-(p:Publicación)-[:PRESENTADA_EN]->(conf:Conferencia)
         RETURN conf, count(p) AS relevancia
         ORDER BY relevancia DESC
-        LIMIT 5
+        LIMIT 10
       `;
       const result = await session.run(query, { userId });
       const conferences = result.records.map(record => ({
