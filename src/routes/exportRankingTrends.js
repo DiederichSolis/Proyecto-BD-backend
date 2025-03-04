@@ -155,7 +155,7 @@ router.get('/ranking/publications', async (req, res) => {
                COUNT(c) AS Comentarios,
                (p.citas + COUNT(u) * 2 + COUNT(c) * 3) AS Reputación
         ORDER BY Reputación DESC
-        LIMIT 10
+        LIMIT 5
         `;
 
         const result = await session.run(query);
