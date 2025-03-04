@@ -115,7 +115,7 @@ router.get('/personalized-recommendations/:userId', async (req, res) => {
       MATCH (u:Usuario {id: $userId})-[:TIENE_INTERÉS_EN]->(c:Categoría)<-[:RELACIONADO_CON]-(p:Publicación)
       RETURN p.título AS Publicación, COUNT(c) AS Relevancia
       ORDER BY Relevancia DESC
-      LIMIT 10
+      LIMIT 5
     `;
     const result = await session.run(query, { userId });
     const recommendations = result.records.map(record => ({
