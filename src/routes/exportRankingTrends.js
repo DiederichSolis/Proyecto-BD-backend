@@ -8,7 +8,7 @@ const { driver } = require('../db');
 // 📌 Exportar usuarios en CSV
 /**
  * @swagger
- * /api/users/csv:
+ *  /api/export/users/csv:
  *   get:
  *     summary: Exporta la lista de usuarios en formato CSV
  *     description: Genera y descarga un archivo CSV con información de los usuarios registrados en la base de datos.
