@@ -191,7 +191,7 @@ router.get('/trending-categories', async (req, res) => {
       WHERE p.fecha_publicación > date("2024-01-01")
       RETURN cat.nombre AS Categoria, count(p) AS NumeroDePublicaciones
       ORDER BY NumeroDePublicaciones DESC
-      LIMIT 5
+      LIMIT 10
     `;
     const result = await session.run(query);
     const trends = result.records.map(record => ({
