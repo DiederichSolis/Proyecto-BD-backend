@@ -7,6 +7,7 @@ const queriesRoutes = require('./routes/queries');
 const advancedQueries = require('./routes/advancedQueries');
 const exportRankingTrendsRoutes = require('./routes/exportRankingTrends');
 const swaggerDocs = require('./swagger'); 
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -14,14 +15,15 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Rutas
+// Registrar Swagger (asegúrate de que esta ruta no sea interceptada por otros middlewares)
+swaggerDocs(app);
+
+// Rutas de la API
 app.use('/nodes', nodeRoutes);
 app.use('/relations', relationsRoutes);
 app.use('/queries', queriesRoutes);
 app.use('/advanced', advancedQueries);
 app.use('/api', exportRankingTrendsRoutes);
-
-swaggerDocs(app); // Activa Swagger
 
 // Ruta de prueba
 app.get('/', (req, res) => {
@@ -34,7 +36,6 @@ process.on('SIGINT', async () => {
   await closeDriver();
   process.exit(0);
 });
-
 
 // Iniciar servidor
 app.listen(PORT, () => {
